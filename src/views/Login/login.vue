@@ -55,9 +55,10 @@ export default {
         if (!val) return
         loging(this.loginForm).then(
           res => {
-            console.log(res)
+            console.log(res.data.data.token)
             if (res.data.meta.status !== 200) return this.$message.error('登录失败')
             this.$message.success(res.data.meta.msg)
+
             sessionStorage.setItem('token', res.data.data.token)
             this.$router.push('/home')
           }

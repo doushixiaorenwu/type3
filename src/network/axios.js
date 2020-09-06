@@ -7,6 +7,7 @@ export function axios (config) {
   })
   instance.interceptors.request.use(
     (config) => {
+      config.headers.Authorization = window.sessionStorage.getItem('token')
       return config
     },
     (err) => {
