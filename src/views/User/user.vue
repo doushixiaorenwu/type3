@@ -1,10 +1,6 @@
 <template>
   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <breadcrumb-user />
     <el-card class="box-card">
       <!-- 搜索 -->
       <el-row :gutter="20">
@@ -34,7 +30,7 @@
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="editUserData(asd.row.id)"> </el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="delUserData(asd.row.id)"></el-button>
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(data.row)"></el-button>
+              <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(asd.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -89,12 +85,34 @@
         <el-button type="primary" @click="delUserData">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配角色权限 -->
+    <el-dialog title="分配角色" :visible.sync="setRoledialogVisible" width="50%" @close="roleClose">
+      <div>
+        <p>当前用户姓名 :{{&nbsp; userInfo.username }}</p>
+        <p>当前用户角色 :{{&nbsp; userInfo.role_name }}</p>
+        <p>
+          分配新角色
+          <el-select v-model="selectRole" placeholder="请选择">
+            <el-option v-for="item in getRoleData" :key="item.id" :label="item.roleName" :value="item.id"> </el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoledialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRoleInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList, userPut, addUserData, getUserData, editUserDataForm, deleteUserData } from '../../network/user'
+import breadcrumbUser from '../../components/content/breadcrumb/user'
+
+import { getUserList, userPut, addUserData, getUserData, editUserDataForm, deleteUserData, getRoleList, allotRole } from '../../network/user'
 export default {
+  components: {
+    breadcrumbUser
+  },
   data () {
     const checkMobile = (rule, value, callback) => {
       const regMobile = /^(0|86|17951)?(13[0-9]|15[0-9]|17[678]|18[0-9]|14[57])[0-9]{8}$/
@@ -105,6 +123,7 @@ export default {
     }
     return {
       editInfo: {},
+      setRoledialogVisible: false,
       dialogVisible: false,
       editDialog: false,
       queryInfo: {
@@ -120,6 +139,11 @@ export default {
         email: '',
         mobile: ''
       },
+      userInfo: {},
+      // 获取的角色信息
+      getRoleData: [],
+      // 选中的角色信息
+      selectRole: '',
       addFormRul: {
         username: [
           { required: true, message: '请输入登录名称', trigger: 'blur' },
@@ -205,16 +229,44 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .catch(err => err)
+      }).catch((err) => err)
       if (confirmResult !== 'confirm') return this.$message.info('已经取消了删除')
       const { data: res } = await deleteUserData(id)
       if (res.meta.status !== 200) return this.$message.error('删除失败')
       this.$message.success('删除成功')
       this.getData()
+    },
+
+    // 获取角色信息
+    async setRole (data) {
+      this.userInfo = data
+      const { data: res } = await getRoleList()
+      if (res.meta.status !== 200) return this.$message.error('获取信息失败')
+      console.log(res)
+      this.getRoleData = res.data
+
+      this.setRoledialogVisible = true
+    },
+    // 更新管理权限
+    async saveRoleInfo () {
+      if (!this.selectRole) return this.$message.error('请选择要分配的角色')
+      const { data: res } = await allotRole(this.userInfo.id, this.selectRole)
+      if (res.meta.status !== 200) return this.$message.error('更新数据失败')
+      this.getData()
+      this.$message.success('这个接口有问题')
+      this.setRoledialogVisible = false
+    },
+    // 关闭的对话框清除内容
+    roleClose () {
+      this.selectRole = ''
+      this.userInfo = ''
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+p {
+  margin: 20px;
+}
+</style>

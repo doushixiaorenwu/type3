@@ -1,6 +1,6 @@
 <template>
   <div>
-     <h2>前端人员写的api吗？</h2>
+     <h2>API写的好，省了很多要做的事情</h2>
   </div>
 </template>
 
