@@ -1,9 +1,9 @@
 <template>
   <div>
-   <breadcrumb-nav>
-   <template #one>权限管理</template>
-   <template #two>权限列表</template>
-   </breadcrumb-nav>
+    <breadcrumb-nav>
+      <template #one>商品管理</template>
+      <template #two>分类参数</template>
+    </breadcrumb-nav>
   </div>
 </template>
 

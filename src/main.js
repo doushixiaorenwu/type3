@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import './assets/css/base.css'
+import './plugins/treeTable'
 
 Vue.config.productionTip = false
 

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import breadcrumbNav from '../../comomon/breadcrumbNav'
+import breadcrumbNav from '@/components/comomon/breadcrumbNav'
 
 export default {
   components: {
