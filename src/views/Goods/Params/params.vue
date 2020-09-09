@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import breadcrumbParams from '@/components/content/breadcrumb/cate.vue'
-import mainParams from '../../../components/content/main/goods/goods'
+import breadcrumbParams from '@/components/content/breadcrumb/params'
+import mainParams from '../../../components/content/main/goods/params'
 
 export default {
   components: {

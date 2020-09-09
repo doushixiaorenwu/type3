@@ -10,6 +10,7 @@ const Rights = () => import('../views/Power/right.vue')
 const Categories = () => import('../views/Goods/Categories/Categories.vue')
 const Params = () => import('../views/Goods/Params/params.vue')
 const Goods = () => import('../views/Goods/goods/goods.vue')
+const Add = () => import('../views/Goods/addGoods.vue')
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,10 @@ const routes = [
       {
         path: '/goods',
         component: Goods
+      },
+      {
+        path: '/goods/add',
+        component: Add
       }
     ]
   }

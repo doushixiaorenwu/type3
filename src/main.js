@@ -4,6 +4,8 @@ import router from './router'
 import './plugins/element.js'
 import './assets/css/base.css'
 import './plugins/treeTable'
+import './common/date'
+import './plugins/quill'
 
 Vue.config.productionTip = false
 
